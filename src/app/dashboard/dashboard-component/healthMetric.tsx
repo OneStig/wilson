@@ -22,7 +22,7 @@ export default function HealthMetric({ icon, title, value, unit, status, color }
         <span className="text-lg font-semibold text-gray-800">{title}</span>
       </div>
       <div className="mb-2">
-        <span className="text-4xl font-bold">{value}</span>
+        <span className="text-4xl text-gray-600 font-bold">{value}</span>
         <span className="text-lg text-gray-600 ml-1">{unit}</span>
       </div>
       <div className={`${bgColor} ${iconColor} text-sm font-medium px-2 py-1 rounded-full inline-block`}>
