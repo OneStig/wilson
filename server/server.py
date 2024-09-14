@@ -24,17 +24,14 @@ def analyze_emotion(face_img):
     emotion, scores = fer.predict_emotions(face_img, logits=False)
     return emotion, scores
 
+# ['Angry', 'Disgust', 'Fear', 'Happy', 'Sad', 'Surprise', 'Neutral']
+# 0, 2, 4
 def get_stress_level(emotion, scores):
     stress_emotions = ['Anger', 'Fear', 'Sadness']
     emotion_dict = dict(zip(EMOTION_LABELS, scores))
     stress_score = sum(emotion_dict[e] for e in stress_emotions if e in emotion_dict)
-    
-    if stress_score < 0.3:
-        return 'Low'
-    elif stress_score < 0.6:
-        return 'Medium'
-    else:
-        return 'High'
+
+    return stress_score
 
 @app.route('/analyze', methods=['POST'])
 def analyze_stress():

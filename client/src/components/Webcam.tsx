@@ -1,8 +1,6 @@
 'use client';
 import React, { useRef, useEffect, useState } from 'react';
 
-type StressLevel = 'Unknown' | 'Low' | 'Medium' | 'High';
-
 interface AlertProps {
   message: string;
 }
@@ -17,7 +15,7 @@ const Alert: React.FC<AlertProps> = ({ message }) => (
 const Webcam: React.FC = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [stressLevel, setStressLevel] = useState<StressLevel>('Unknown');
+  const [stressLevel, setStressLevel] = useState<String>('Unknown');
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
