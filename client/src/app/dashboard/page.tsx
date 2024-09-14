@@ -1,13 +1,10 @@
 import React from 'react';
 import Webcam from "@/components/Webcam";
-import HealthMetric from './dashboard-component/healthMetric';
-import MetricBadge from './dashboard-component/metricBadge';
-import Microphone from './dashboard-component/microphone';
-import Camera from './dashboard-component/camera';
+import HealthMetric from '@/components/dashboard-components/HealthMetric';
+import MetricBadge from '@/components/dashboard-components/MetricBadge';
+import Microphone from '@/components/dashboard-components/Microphone';
 
 export default function Dashboard() {
-
-
   return (
     <div className="flex h-screen bg-white font-sans">
       {/* Health Overview Section */}
@@ -45,9 +42,9 @@ export default function Dashboard() {
       <div className="w-1/2 bg-gray-900 p-8 text-white overflow-auto rounded-l-3xl">
         <h2 className="text-2xl font-semibold mb-6">Learning and Interaction Unit</h2>
         <div className="flex justify-between items-start mb-8">
-          
+
           <Microphone/>
-          <Camera />
+          <Webcam />
         </div>
         <div className="flex justify-between mb-12">
           <MetricBadge icon="💧" title="Comfort" value="102"  color='sky' />
