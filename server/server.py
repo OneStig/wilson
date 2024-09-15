@@ -17,7 +17,7 @@ CORS(app)
 # Set up logging
 logging.basicConfig(level=logging.DEBUG)
 
-model = whisper.load_model('base')
+model = whisper.load_model('base.en')
 model_name = 'enet_b0_8_best_afew'
 fer = HSEmotionRecognizer(model_name=model_name)
 
@@ -61,10 +61,12 @@ def analyze_stress():
 def transcribe_audio():
     if not request.data:
         return jsonify({'error': 'No audio data provided'}), 400
-
     try:
         # Convert the raw PCM data to a numpy array
         audio_data = np.frombuffer(request.data, dtype=np.float32)
+
+        # Normalize the audio data
+        audio_data = audio_data / np.max(np.abs(audio_data))
 
         # Ensure the audio data is at least 1 second long (assuming 44100 Hz sample rate)
         if len(audio_data) < 44100:
@@ -76,11 +78,10 @@ def transcribe_audio():
             temp_audio_path = temp_audio.name
 
         # Transcribe the audio
-        result = model.transcribe(temp_audio_path, language="en")
+        result = model.transcribe(temp_audio_path, language="en", fp16=False)
         transcription = result['text']
 
         app.logger.info(f"Transcription result: {transcription}")
-
         return jsonify({'transcription': transcription})
     except Exception as e:
         app.logger.error(f"Error during transcription: {str(e)}", exc_info=True)

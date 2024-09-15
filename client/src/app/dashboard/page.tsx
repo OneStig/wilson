@@ -19,16 +19,10 @@ export default function Dashboard() {
   useEffect(() => {
     const interval = setInterval(() => {
       // Generate completely random values for all metrics
-      setHeartRate(Math.floor(Math.random() * (140 - 60 + 1)) + 60);
-      setWpm(Math.floor(Math.random() * (120 - 80 + 1)) + 80);
       setEmotion(() => {
         const emotions = ["Happy", "Neutral", "Focused", "Tired"];
         return emotions[Math.floor(Math.random() * emotions.length)];
       });
-      setComfort(Math.floor(Math.random() * 101)); // 0 to 100
-      setEnergyLevel(Math.floor(Math.random() * 101)); // 0 to 100
-      setStress(Math.floor(Math.random() * 101)); // 0 to 100
-      setAttention(Math.floor(Math.random() * 101)); // 0 to 100
     }, 100);
 
     return () => clearInterval(interval);
@@ -98,7 +92,7 @@ export default function Dashboard() {
 
       {/* Learning and Interaction Unit Section */}
       <div className="w-1/2 bg-gray-900 p-8 text-white overflow-auto rounded-l-3xl">
-        <h2 className="text-2xl font-semibold mb-6">Learning and Interaction Unit</h2>
+        <h2 className="text-2xl font-semibold mb-6">Learning Interaction Unit</h2>
         <div className="flex justify-center items-center">
           <div className='w-1/2 flex justify-center '>
             <Microphone/>
@@ -107,21 +101,13 @@ export default function Dashboard() {
             <Webcam />
           </div>
         </div>
-        <div className="flex justify-between mb-12">
-          <MetricBadge icon="💧" title="Comfort" value={comfort} color='blue' />
-          <MetricBadge icon="🔋" title="Energy level" value={energyLevel} color='green' />
-          <MetricBadge icon="❤️" title="Stress" value={stress} color='red' />
-          <MetricBadge icon="⚠️" title="Attention" value={attention} color='yellow'/>
-        </div>
-        <div className="flex justify-between"> 
-          <AITalking/>
-          <div className='w-1/2'>
-          <Response
-          response = "get some bitches"
-          />
+          <div className="flex flex-col items-center">
+            <AITalking />
+            <div className='w-full'>
+              <Response response="placeholder" />
+            </div>
           </div>
 
-        </div>
       </div>
     </div>
   );
