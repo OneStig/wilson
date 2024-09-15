@@ -4,6 +4,8 @@ import Webcam from "@/components/Webcam";
 import HealthMetric from '@/components/dashboard-components/HealthMetric';
 import MetricBadge from '@/components/dashboard-components/MetricBadge';
 import Microphone from '@/components/dashboard-components/Microphone';
+import AITalking from '@/components/dashboard-components/aitalking';
+import Response from '@/components/dashboard-components/Response';
 
 export default function Dashboard() {
   const [heartRate, setHeartRate] = useState(98);
@@ -87,6 +89,11 @@ export default function Dashboard() {
             color="yellow"
           />
         </div>
+        <div className="flex justify-center">
+          <div className="w-32 h-32 bg-yellow-500 rounded-full flex items-center justify-center text-6xl">
+            {emotion === "Happy" ? "😊" : emotion === "Neutral" ? "😐" : emotion === "Focused" ? "🧐" : "😴"}
+          </div>
+        </div>
       </div>
 
       {/* Learning and Interaction Unit Section */}
@@ -106,10 +113,14 @@ export default function Dashboard() {
           <MetricBadge icon="❤️" title="Stress" value={stress} color='red' />
           <MetricBadge icon="⚠️" title="Attention" value={attention} color='yellow'/>
         </div>
-        <div className="flex justify-center">
-          <div className="w-32 h-32 bg-yellow-500 rounded-full flex items-center justify-center text-6xl">
-            {emotion === "Happy" ? "😊" : emotion === "Neutral" ? "😐" : emotion === "Focused" ? "🧐" : "😴"}
+        <div className="flex justify-between"> 
+          <AITalking/>
+          <div className='w-1/2'>
+          <Response
+          response = "get some bitches"
+          />
           </div>
+
         </div>
       </div>
     </div>
