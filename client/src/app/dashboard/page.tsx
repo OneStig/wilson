@@ -4,9 +4,10 @@ import Webcam from "@/components/Webcam";
 import HealthMetric from '@/components/dashboard-components/HealthMetric';
 import MetricBadge from '@/components/dashboard-components/MetricBadge';
 import Microphone from '@/components/dashboard-components/Microphone';
-import AITalking from '@/components/dashboard-components/aitalking';
+import AITalking from '@/components/dashboard-components/AiTalking';
 import Response from '@/components/dashboard-components/Response';
-
+import Switch
+ from '@/components/dashboard-components/Switch';
 export default function Dashboard() {
   const [heartRate, setHeartRate] = useState(98);
   const [wpm, setWpm] = useState(102);
@@ -15,6 +16,16 @@ export default function Dashboard() {
   const [energyLevel, setEnergyLevel] = useState(102);
   const [stress, setStress] = useState(102);
   const [attention, setAttention] = useState(102);
+
+
+  const [currentPhrase, setCurrentPhrase] = useState('');
+  const [micOn, setMicOn] = useState(true);
+  const [cameraOn, setCameraOn] = useState(true);
+  const [watchOn, setWatchOn] = useState(true);
+
+  const toggleSetting = (setter: React.Dispatch<React.SetStateAction<boolean>>) => {
+    setter(prev => !prev);
+  };
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -36,19 +47,6 @@ export default function Dashboard() {
         return value < 90 ? "Slow" : value > 110 ? "Fast" : "Normal";
       default:
         return "Normal";
-    }
-  };
-
-  const getColor = (value: number, metric: string) => {
-    switch (metric) {
-      case 'heartRate':
-        return value < 60 || value > 100 ? "red" : "green";
-      case 'wpm':
-        return value < 90 ? "yellow" : value > 110 ? "green" : "blue";
-      case 'emotion':
-        return emotion === "Happy" ? "yellow" : emotion === "Focused" ? "green" : "blue";
-      default:
-        return "blue";
     }
   };
 
@@ -84,9 +82,25 @@ export default function Dashboard() {
           />
         </div>
         <div className="flex justify-center">
-          <div className="w-32 h-32 bg-yellow-500 rounded-full flex items-center justify-center text-6xl">
+          <div className="my-4 w-full h-32 bg-yellow-500 rounded-full flex items-center justify-center text-6xl">
             {emotion === "Happy" ? "😊" : emotion === "Neutral" ? "😐" : emotion === "Focused" ? "🧐" : "😴"}
           </div>
+        </div>
+        <div className="flex justify-center space-x-4 mt-4">
+        <Switch 
+            initialState={true}
+            onToggle={(isOn) => console.log('Switch is now:', isOn)} 
+            title={'Microphone'}      />
+        <Switch 
+        initialState={true} 
+        onToggle={(isOn) => console.log('Switch is now:', isOn)} 
+        title={'Camera'}  
+      />
+              <Switch 
+        initialState={true} 
+        onToggle={(isOn) => console.log('Switch is now:', isOn)} 
+        title={'Apple Watch'}  
+      />
         </div>
       </div>
 

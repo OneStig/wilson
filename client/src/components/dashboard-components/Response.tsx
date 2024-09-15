@@ -2,17 +2,17 @@ import React from 'react';
 
 // Define props for the component
 interface ResponseProps {
-  response: string; // The response received from the API
+    response: string; // The response received from the API
 }
 
 const Response: React.FC<ResponseProps> = ({ response }) => {
-  return (
-    <div className="flex justify-center items-center mt-5">
-      <div className="p-4 border border-gray-300 rounded-lg bg-gray-50 shadow-md max-w-lg w-full text-center text-gray-800">
-        {response || "No response available"}
-      </div>
-    </div>
-  );
+    return (
+        <div className="flex justify-center items-center mt-5">
+            <div className="text-2xl text-[rgb(200,200,255)] text-center font-mono p-5 bg-gray-900 bg-opacity-90 rounded-lg border-2 border-[rgb(200,200,255)] shadow-inner shadow-[rgb(200,200,255)]">
+                <div>{response}</div>
+            </div>
+        </div>
+    );
 };
 
 export default Response;

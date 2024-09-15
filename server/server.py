@@ -90,6 +90,9 @@ def transcribe_audio():
         # Clean up the temporary file
         if os.path.exists(temp_audio_path):
             os.unlink(temp_audio_path)
+            
+        
+    
 
 if __name__ == '__main__':
     app.run(debug=True, port=8080)

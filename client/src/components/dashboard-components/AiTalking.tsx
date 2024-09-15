@@ -11,7 +11,7 @@ interface AITalkingProps {
 
 const AITalking: React.FC<AITalkingProps> = ({
   width = 300,
-  height = 340,
+  height = 300,
   circleColor = 'rgb(200,200,255)',
   brainColor = '#333',
   waveColor = 'rgb(200,200,255)'
@@ -90,15 +90,13 @@ const AITalking: React.FC<AITalkingProps> = ({
         </g>
 
         <g transform="translate(0, 190)">
-          <rect className="wave" x="30" y="30" width="20" height="40" rx="10" fill={waveColor} style={{animationDelay: '-0.3s', animationPlayState: isAnimating ? 'running' : 'paused'}} />
-          <rect className="wave" x="70" y="20" width="20" height="60" rx="10" fill={waveColor} style={{animationDelay: '-0.6s', animationPlayState: isAnimating ? 'running' : 'paused'}} />
-          <rect className="wave" x="110" y="10" width="20" height="80" rx="10" fill={waveColor} style={{animationDelay: '-0.9s', animationPlayState: isAnimating ? 'running' : 'paused'}} />
-
-
-          <rect className="wave" x="150" y="15" width="20" height="70" rx="10" fill={waveColor} style={{animationDelay: '-1.2s', animationPlayState: isAnimating ? 'running' : 'paused'}} />
-          <rect className="wave" x="190" y="25" width="20" height="50" rx="10" fill={waveColor} style={{animationDelay: '-1.5s', animationPlayState: isAnimating ? 'running' : 'paused'}} />
-          <rect className="wave" x="230" y="35" width="20" height="30" rx="10" fill={waveColor} style={{animationDelay: '-1.8s', animationPlayState: isAnimating ? 'running' : 'paused'}} />
-        </g>
+  <rect className="wave" x="30" y="45" width="20" height="25" rx="10" fill={waveColor} style={{animationDelay: '-0.3s', animationPlayState: isAnimating ? 'running' : 'paused'}} />
+  <rect className="wave" x="70" y="40" width="20" height="35" rx="10" fill={waveColor} style={{animationDelay: '-0.6s', animationPlayState: isAnimating ? 'running' : 'paused'}} />
+  <rect className="wave" x="110" y="35" width="20" height="45" rx="10" fill={waveColor} style={{animationDelay: '-0.9s', animationPlayState: isAnimating ? 'running' : 'paused'}} />
+  <rect className="wave" x="150" y="38" width="20" height="40" rx="10" fill={waveColor} style={{animationDelay: '-1.2s', animationPlayState: isAnimating ? 'running' : 'paused'}} />
+  <rect className="wave" x="190" y="43" width="20" height="30" rx="10" fill={waveColor} style={{animationDelay: '-1.5s', animationPlayState: isAnimating ? 'running' : 'paused'}} />
+  <rect className="wave" x="230" y="48" width="20" height="20" rx="10" fill={waveColor} style={{animationDelay: '-1.8s', animationPlayState: isAnimating ? 'running' : 'paused'}} />
+</g>
 
       </svg>
     </div>
