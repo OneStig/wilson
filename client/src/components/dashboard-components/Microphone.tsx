@@ -1,76 +1,100 @@
 'use client';
-
-import React, { useState, useCallback } from 'react';
+import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { Mic, MicOff } from 'lucide-react';
 
-export default function Microphone() {
-  const [isActive, setIsActive] = useState<boolean>(false);
-  const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder | null>(null);
-  const [audioChunks, setAudioChunks] = useState<Blob[]>([]);
+const AudioRecorder: React.FC = () => {
+  const [isRecording, setIsRecording] = useState(false);
+  const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
+  const [analysisResult, setAnalysisResult] = useState<any>(null);
+  const [error, setError] = useState<string | null>(null);
+  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+  const chunksRef = useRef<Blob[]>([]);
 
   const startRecording = useCallback(async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      const recorder = new MediaRecorder(stream);
-
-      recorder.ondataavailable = (event: BlobEvent) => {
-        setAudioChunks(chunks => [...chunks, event.data]);
+      const mediaRecorder = new MediaRecorder(stream);
+      mediaRecorderRef.current = mediaRecorder;
+      mediaRecorder.ondataavailable = (event) => {
+        if (event.data.size > 0) {
+          chunksRef.current.push(event.data);
+        }
       };
-
-      recorder.onstop = () => {
-        const audioBlob: Blob = new Blob(audioChunks, { type: 'audio/wav' });
-        handleAudioCapture(audioBlob);
-        setAudioChunks([]);
+      mediaRecorder.onstop = () => {
+        const audioBlob = new Blob(chunksRef.current, { type: 'audio/wav' });
+        setAudioBlob(audioBlob);
+        chunksRef.current = [];
       };
-
-      recorder.start();
-      setMediaRecorder(recorder);
-      setIsActive(true);
-      console.log('Recording started');
-    } catch (error) {
-      console.error('Error accessing microphone:', error);
+      mediaRecorder.start();
+      setIsRecording(true);
+    } catch (err) {
+      console.error('Error accessing microphone:', err);
+      setError('Failed to access microphone. Please ensure you have given permission.');
     }
-  }, [audioChunks]);
+  }, []);
 
   const stopRecording = useCallback(() => {
-    if (mediaRecorder) {
-      mediaRecorder.stop();
-      setIsActive(false);
-      setMediaRecorder(null);
-      console.log('Recording stopped');
+    if (mediaRecorderRef.current) {
+      mediaRecorderRef.current.stop();
+      setIsRecording(false);
     }
-  }, [mediaRecorder]);
+  }, []);
 
-  const handleClick = () => {
-    if (isActive) {
-      stopRecording();
-    } else {
-      startRecording();
+  useEffect(() => {
+    if (audioBlob) {
+      analyzeAudio(audioBlob);
     }
-  };
+  }, [audioBlob]);
 
-  const handleAudioCapture = (audioBlob: Blob) => {
-    const audioUrl = URL.createObjectURL(audioBlob);
-    const audio = new Audio(audioUrl);
-    audio.play();
-    console.log('Audio captured and playing');
+  const analyzeAudio = async (blob: Blob) => {
+    const formData = new FormData();
+    formData.append('audio', blob, 'recording.wav');
+    try {
+      const response = await fetch('http://localhost:8080/analyze_audio', {
+        method: 'POST',
+        body: formData,
+      });
+      const data = await response.json();
+      setAnalysisResult(data);
+    } catch (err) {
+      console.error('Error analyzing audio:', err);
+      setError('Failed to analyze audio. Please try again.');
+    }
   };
 
   return (
-    <button
-      onClick={handleClick}
-      className={`p-3 rounded-full transition-colors duration-300 ${
-        isActive 
-          ? 'bg-red-500 hover:bg-red-600' 
-          : 'bg-blue-500 hover:bg-blue-600'
-      }`}
-      aria-label={isActive ? 'Stop recording' : 'Start recording'}
-    >
-      {isActive ? (
-        <MicOff className="w-6 h-6 text-white" />
+    <div className="flex flex-col items-center p-4 space-y-4">
+      {error ? (
+        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+          <strong className="font-bold">Error!</strong>
+          <span className="block sm:inline"> {error}</span>
+        </div>
       ) : (
-        <Mic className="w-6 h-6 text-white" />
+        <>
+          <button
+            onClick={isRecording ? stopRecording : startRecording}
+            className={`p-3 rounded-full transition-colors duration-300 ${
+              isRecording ? 'bg-red-500 hover:bg-red-600' : 'bg-blue-500 hover:bg-blue-600'
+            }`}
+            aria-label={isRecording ? 'Stop recording' : 'Start recording'}
+          >
+            {isRecording ? (
+              <MicOff className="w-6 h-6 text-white" />
+            ) : (
+              <Mic className="w-6 h-6 text-white" />
+            )}
+          </button>
+          {analysisResult && (
+            <div className="text-lg">
+              <p>Dominant Emotion: <span className="font-bold">{analysisResult.emotion}</span></p>
+              <p>Words per Minute: <span className="font-bold">{analysisResult.wpm}</span></p>
+              <p>Nervousness Level: <span className="font-bold">{analysisResult.nervousness}</span></p>
+            </div>
+          )}
+        </>
       )}
-    </button>
+    </div>
   );
-}
+};
+
+export default AudioRecorder;
